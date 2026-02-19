@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sap-api
+  namespace: sap-demo
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: sap-api
+  template:
+    metadata:
+      labels:
+        app: sap-api
+    spec:
+      containers:
+      - name: sap-api
+        image: us-central1-docker.pkg.dev/<PROJECT-ID>/sap-repo/sap-api:v1
+        ports:
+        - containerPort: 5000
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 5000
+          initialDelaySeconds: 5
+          periodSeconds: 10
